@@ -1,3 +1,4 @@
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -70,30 +71,30 @@ class Exam3{
 }
 
 class Exam4 implements Runnable{
-    private int x;
-    private int y;
-    private int z;
+    private AtomicInteger x = new AtomicInteger(1);
+    private AtomicInteger y = new AtomicInteger(1);
     public static void main(String[] args){
         Exam4 that = new Exam4();
         Thread a = (new Thread(that)); // linea 1
         a.start();
-        try{a.join();}
-        catch(InterruptedException e){}
-        Thread b = (new Thread(that)); // linea 1
+        Thread b = (new Thread(that)); // linea 2
         b.start();
     }
     public void run(){ // linea 3 - Se con synchronized e' come se usassi .run(), va in modo sequenziale
-        try {
-            Thread.sleep(5000);
+        /*try {
+            Thread.sleep(2000);
         } catch (InterruptedException e) { }
-        for(int i=0; i<10; i++){ // linea 4
-            try {
-                Thread.sleep(1000);
+        */
+
+        for(int i=0; i<100; i++){ // linea 4
+
+           /* try {
+                Thread.sleep(500);
             } catch (InterruptedException e) { }
-            x++;
-            y++;
-            z = z+2;
-            System.out.println(" x = " + x + " | y = " + y + " | z = "+ z);
+            */
+            x.incrementAndGet();
+            y.incrementAndGet();
+            System.out.println(" x = " + x + " | y = " + y);
         }
     }
 }
